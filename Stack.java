@@ -3,6 +3,7 @@ package stack;
 //Author: Tyler Staker
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 //Queue data structure
 public class Stack<T> {
@@ -36,12 +37,20 @@ public class Stack<T> {
 	}
 	
 	//Removes the newest element in the stack
-	public T pop() {
+	public T pop() throws NoSuchElementException{
+		//Cannot pop off an empty stack
+		if(size() == 0) {
+			throw new NoSuchElementException();
+		}
 		return stack.remove(size() - 1);
 	}
 	
 	//Returns the top element of the stack
-	public T peek() {
+	public T peek() throws NoSuchElementException{
+		//Cannot peek if stack is empty
+		if(size() == 0) {
+			throw new NoSuchElementException();
+		}
 		return stack.get(size() - 1);
 	}
 	
