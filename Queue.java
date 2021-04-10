@@ -3,6 +3,7 @@ package queue;
 //Author: Tyler Staker
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 //Queue data structure
 public class Queue<T> {
@@ -34,12 +35,20 @@ public class Queue<T> {
 	}
 	
 	//Removes the oldest element in the queue
-	public T dequeue() {
+	public T dequeue() throws NoSuchElementException{
+		//Cannot dequeue an empty queue
+		if(size() == 0) {
+			throw new NoSuchElementException();
+		}
 		return queue.remove(0);
 	}
 	
 	//Returns the top element of the queue
-	public T peek() {
+	public T peek() throws NoSuchElementException{
+		//Cannot peek an empty queue
+		if(size() == 0) {
+			throw new NoSuchElementException();
+		}
 		return queue.get(0);
 	}
 	
