@@ -1,5 +1,3 @@
-package queue;
-
 //Author: Tyler Staker
 
 import java.util.ArrayList;
