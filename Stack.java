@@ -1,5 +1,3 @@
-package stack;
-
 //Author: Tyler Staker
 
 import java.util.ArrayList;
