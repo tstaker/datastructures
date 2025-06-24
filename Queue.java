@@ -1,5 +1,3 @@
-//Author: Tyler Staker
-
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
