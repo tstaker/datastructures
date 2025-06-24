@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-//Queue data structure
+//Stack data structure
 public class Stack<T> {
 
 	ArrayList<T> stack;
@@ -19,7 +19,7 @@ public class Stack<T> {
 	public int contains(T item) {
 		int index = 0;
 		for(int i = size() - 1; i >= 0; i--) {
-			if(stack.get(i) == item) {
+			if(stack.get(i).equals(item)) {
 				return index;
 			}
 			index++;

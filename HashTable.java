@@ -71,7 +71,8 @@ class HashTable {
   
   public void remove(String value){
     if(search(value) != -1){
-        table.set(search(value), value);
+        table.set(search(value), null);
+        numValues--;
         System.out.println("Value removed");
         return;
     }
@@ -81,19 +82,21 @@ class HashTable {
   //Returns key of value, or -1 if value not found
   public int search(String value){
     int key = value.hashCode() % size;
+    if(key < 0){
+      key *= -1; 
+    }
     
-    if(table.get(key) == value){
-      return key;
-    }
-    //Value might still be in table
-    else{
-      for(int i = 0; i < table.size(); i++){
-        if(table.get(key) == value){
-          return key;
-        }
+    int originalKey = key;
+    
+    // Linear probing to find the value
+    do {
+      if(table.get(key) != null && table.get(key).equals(value)){
+        return key;
       }
-      return -1;
-    }
+      key = (key + 1) % size;
+    } while(key != originalKey && table.get(key) != null);
+    
+    return -1;
   }
   
   public void rehash(){
@@ -110,7 +113,9 @@ class HashTable {
     //Add values back into table
     numValues = 0;
     for(int j = 0; j < temp.size(); j++){
-      insert(temp.get(j));
+      if(temp.get(j) != null) {
+        insert(temp.get(j));
+      }
     }
   }
   

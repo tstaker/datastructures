@@ -18,7 +18,7 @@ public class Queue<T> {
 	//Returns the index of the found element, or -1 if no element is found
 	public int contains(T item) {
 		for(int i = 0; i < size(); i++) {
-			if(queue.get(i) == item) {
+			if(queue.get(i).equals(item)) {
 				return i;
 			}
 		}

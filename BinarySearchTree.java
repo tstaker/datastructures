@@ -118,89 +118,57 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	
 	//Removes the first node found that has data matching the argument, or does nothing if no such data
 	public void remove(E data) {
-		if(size == 0) {
-			return;
+		head = removeHelper(head, data);
+	}
+	
+	private Node<E> removeHelper(Node<E> node, E data) {
+		if(node == null) {
+			return null;
 		}
-		Node<E> temp = head;
-		Node<E> tempParent = head;
-		boolean leftOfParent = false;
-		while(temp.hasChild()) {
-			//If the data to be removed is less than the current node
-			if(data.compareTo(temp.getData()) < 0) {
-				tempParent = temp;
-				if(temp.getLeftNode() == null) {
-					return;
-				}
-				temp = temp.getLeftNode();
-				leftOfParent = true;
+		
+		int comparison = data.compareTo(node.getData());
+		
+		if(comparison < 0) {
+			node.setLeftNode(removeHelper(node.getLeftNode(), data));
+		}
+		else if(comparison > 0) {
+			node.setRightNode(removeHelper(node.getRightNode(), data));
+		}
+		else {
+			// Node to be removed found
+			size--;
+			
+			// Case 1: Node has no children
+			if(node.getLeftNode() == null && node.getRightNode() == null) {
+				return null;
 			}
-			//If the data to be removed is greater than the current node
-			else if(data.compareTo(temp.getData()) > 0){
-				tempParent = temp;
-				if(temp.getRightNode() == null) {
-					return;
-				}
-				temp = temp.getRightNode();
-				leftOfParent = false;
+			// Case 2: Node has only right child
+			else if(node.getLeftNode() == null) {
+				return node.getRightNode();
 			}
-			//Data to be removed is found
+			// Case 3: Node has only left child
+			else if(node.getRightNode() == null) {
+				return node.getLeftNode();
+			}
+			// Case 4: Node has both children
 			else {
-				size--;
-				//Node has 2 children
-				if(temp.getLeftNode() != null && temp.getRightNode() != null) {
-					Node<E> currentLocation = temp;
-					//Find successor: go right one then left as far as you can
-					if(temp.getRightNode() != null) {
-						tempParent = temp;
-						temp = temp.getRightNode();
-					}
-					while(temp.getLeftNode() != null) {
-						tempParent = temp;
-						temp = temp.getLeftNode();
-					}
-					//If the node to swap with the removed node has a right child
-					if(temp.getRightNode() != null) {
-						//Set the parent of the swapped node's left node equal to the right child
-						tempParent.setLeftNode(temp.getRightNode());
-					}
-					//Set the left and right children of the swapped node equal to the removed node's
-					temp.setLeftNode(currentLocation.getLeftNode());
-					temp.setRightNode(currentLocation.getRightNode());
-					
-				}
-				//Node has 1 child
-				else if(temp.getLeftNode() != null || temp.getRightNode() != null) {
-					//The 1 child is the left node; set the child equal to the node's location
-					if(temp.getLeftNode() != null) {
-						if(leftOfParent) {
-							tempParent.setLeftNode(temp.getLeftNode());
-						}
-						else {
-							tempParent.setRightNode(temp.getLeftNode());
-						}
-					}
-					//The 1 child is the right node; set the child equal to the node's location
-					else {
-						if(leftOfParent) {
-							tempParent.setLeftNode(temp.getRightNode());
-						}
-						else {
-							tempParent.setRightNode(temp.getRightNode());
-						}
-					}
-				}
-				//Node has 0 children
-				else {
-					if(leftOfParent) {
-						tempParent.setLeftNode(null);
-					}
-					else {
-						tempParent.setRightNode(null);
-					}
-				}
-				return;
+				// Find inorder successor (smallest in right subtree)
+				Node<E> successor = findMin(node.getRightNode());
+				// Replace node's data with successor's data
+				node.setData(successor.getData());
+				// Remove the successor
+				node.setRightNode(removeHelper(node.getRightNode(), successor.getData()));
+				size++; // Increment back since we decremented above but we're removing successor
 			}
 		}
+		return node;
+	}
+	
+	private Node<E> findMin(Node<E> node) {
+		while(node.getLeftNode() != null) {
+			node = node.getLeftNode();
+		}
+		return node;
 	}
 	
 	//Prints the tree in inOrder fashion
