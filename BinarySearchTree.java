@@ -1,5 +1,3 @@
-//Author: Tyler Staker
-
 public class BinarySearchTree<E extends Comparable<E>> {
 
 	public class Node<T>{
